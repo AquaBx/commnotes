@@ -55,7 +55,7 @@
 
     </tr>
 
-    {#each groups[keygroup].members as member}
+    {#each Object.values(groups[keygroup].members) as member}
         <tr>
           <td>{member.name}</td>
         </tr>

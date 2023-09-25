@@ -6,23 +6,29 @@ export const selectedGroupNote = writable(["",""]);
 export const currentGroups = writable(
     { 
         "gr1" : {
-        name:"Groupe 1",
-        notes:{
+            name:"Groupe 1",
+            notes:{},
+            members : {
+                "a" : {name:"Damien"},
+                "b" : {name:"Baptise"},
+            }
         },
-        members : [
-          {name:"Tom",},
-          {name:"Tanguy"},
-        ]
-      },
         "gr2" : {
-        name:"Groupe 2",
-        notes:{
+            name:"Groupe 2",
+            notes:{},
+            members : {
+                "a" : {name:"Damien"},
+                "b" : {name:"Baptise"},
+            }
         },
-        members : [
-          {name:"Damien",},
-          {name:"Baptise"},
-        ]
-      }
+        "gr3" : {
+            name:"Groupe 3",
+            notes:{},
+            members : {
+                "a" : {name:"Damien"},
+                "b" : {name:"Baptise"},
+            }
+        }
     }
 );
 
@@ -43,7 +49,7 @@ export function derivedCurrentGroups(GroupID:string,NoteID:string) {
 
 export const currentNotes = writable(
     {
-        nt1:{
+        "nt1":{
             name:"CC1",
             commentaire:"",
             criteres : {
@@ -77,39 +83,75 @@ export const currentNotes = writable(
                 }
             }
         },
-        nt2:{
-          name:"CC2",
-          commentaire:"",
-          criteres : {
-            crit1:{
-                name:"Structure globale du diaporama",
-                note:2
-            },
-            crit2:{
-                name:"Qualité de la communication orale",
-                note:5
-            },
-            crit3:{
-                name:"Qualité de la communication non-verbale",
-                note:2
-            },
-            crit4:{
-                name:"Clarté et lisibilité du support",
-                note:2
-            },
-            crit5:{
-                name:"Pertinence de l’introduction",
-                note:2
-            },
-            crit6:{
-                name:"Pertinence du développement et structuration des idées",
-                note:10
-            },
-            crit7:{
-                name:"Pertinence de la conclusion",
-                note:2
-            }
-        }
+        "nt2":{
+            name:"CC2",
+            commentaire:"",
+            criteres : {
+              crit1:{
+                  name:"Structure globale du diaporama",
+                  note:2
+              },
+              crit2:{
+                  name:"Qualité de la communication orale",
+                  note:5
+              },
+              crit3:{
+                  name:"Qualité de la communication non-verbale",
+                  note:2
+              },
+              crit4:{
+                  name:"Clarté et lisibilité du support",
+                  note:2
+              },
+              crit5:{
+                  name:"Pertinence de l’introduction",
+                  note:2
+              },
+              crit6:{
+                  name:"Pertinence du développement et structuration des idées",
+                  note:10
+              },
+              crit7:{
+                  name:"Pertinence de la conclusion",
+                  note:2
+              }
+          },
+          
+        },
+        "nt3":{
+            name:"CC3",
+            commentaire:"",
+            criteres : {
+              crit1:{
+                  name:"Structure globale du diaporama",
+                  note:2
+              },
+              crit2:{
+                  name:"Qualité de la communication orale",
+                  note:5
+              },
+              crit3:{
+                  name:"Qualité de la communication non-verbale",
+                  note:2
+              },
+              crit4:{
+                  name:"Clarté et lisibilité du support",
+                  note:2
+              },
+              crit5:{
+                  name:"Pertinence de l’introduction",
+                  note:2
+              },
+              crit6:{
+                  name:"Pertinence du développement et structuration des idées",
+                  note:10
+              },
+              crit7:{
+                  name:"Pertinence de la conclusion",
+                  note:2
+              }
+          },
+          
         }
       }
 );
