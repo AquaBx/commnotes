@@ -43,10 +43,7 @@
       </td>
     </tr>
     {/each}
-    
-    
-    
-    
+
   </table>
 
   <h3>Commentaire</h3>

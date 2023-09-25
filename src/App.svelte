@@ -1,36 +1,17 @@
-<script lang="ts">
-  import Groups from './lib/groups.svelte'
-  import Notes from './lib/notes.svelte'
+<script>
+    import Configs from "./Configs.svelte";
+    import Main from "./Main.svelte";
 
-  import {currentGroups,currentNotes} from './stores/store'
-
-  let groups = $currentGroups
-  let notes = $currentNotes
-
+    let dir = "Home"
 </script>
 
 <main>
-  <h1>Comm'Notes</h1>
-
-  <div class="flex">
-      <Groups></Groups>
-
-      <Notes></Notes>
-  </div>
-
+  <button on:click={() => {dir = "Home"}}>Home</button>
+  <button on:click={() => {dir = "Configs"}}>Configs</button>
+  {#if dir == "Home"}
+  <Main></Main>
+  {:else if dir == "Configs"}
+  <Configs></Configs>
+  {/if}
 
 </main>
-
-
-<style>
-
-  .flex {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    width: 100%;
-    text-align: left;
-    gap : 16px;
-  }
-
-
-</style>
