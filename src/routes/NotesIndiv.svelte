@@ -5,7 +5,8 @@
 </script>
 
 <div>
-
+{console.log(evaluations)}
+{console.log($evaluations)}
 </div>
 
 <style>

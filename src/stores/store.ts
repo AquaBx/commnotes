@@ -106,11 +106,7 @@ export class Evaluations {
     get getEvaluations(){
         return Object.values(this.evaluations)
     }
-
-    getEvaluation(id:string){
-        return this.evaluations[id]
-    }
-
+    
     set addEvaluation(name:string){
         let id = genID()
         this.evaluations[id] = new Evaluation(id,name)

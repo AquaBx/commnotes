@@ -1,13 +1,10 @@
 <script lang="ts">
-
-  import Groups from '../lib/groups.svelte';
 import {evaluations} from '../stores/store'
 
   let selected : string
 </script>
 
 <div class="flex">
-  <Groups></Groups>
 
   <div class="grid">
     <h2>Edition des groupes</h2>
@@ -21,7 +18,7 @@ import {evaluations} from '../stores/store'
     </select>
   
     {#if selected}
-        {#each $evaluations.getEvaluation(selected).getGroupes as groupe}
+        {#each $evaluations.evaluations[selected].getGroupes as groupe}
             <input bind:value={groupe.name}>
   
             {#each groupe.getMembers as member}
@@ -36,7 +33,7 @@ import {evaluations} from '../stores/store'
             <br>
   
         {/each}
-        <button on:click={() => $evaluations.getEvaluation(selected).addGroupe = "Nouveau Groupe"}>Ajouter un groupe</button>
+        <button on:click={() => $evaluations.evaluations[selected].addGroupe = "Nouveau Groupe"}>Ajouter un groupe</button>
     {/if}
   
     <br>
