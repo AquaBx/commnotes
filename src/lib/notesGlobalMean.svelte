@@ -1,5 +1,5 @@
 <script lang="ts">
-  import {currentNotes,currentGroups} from '../stores/store'
+  import {currentEvals,currentGroups} from '../stores/store'
 
   export let keygroup:string
   let mean = 0
@@ -11,7 +11,7 @@
       let dividende = 0
       let diviseur = 0
 
-      let criteres = $currentNotes[keynote].criteres
+      let criteres = $currentEvals[keynote].criteres
       for (let keyCritere of Object.keys(criteres)){
         diviseur += criteres[keyCritere].note
         dividende += value[keygroup].notes[keynote].criteres[keyCritere].note
