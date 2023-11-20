@@ -37,6 +37,7 @@
 
     let fileData = await readTextFile( path );
     Object.assign($evaluations,JSON.parse(fileData))
+    $evaluations.assignChilds()
 
   }
 

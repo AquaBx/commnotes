@@ -47,6 +47,16 @@ class Groupe {
     set removeMember(id:string){
         delete this.members[id]
     }
+
+    assignChilds() {
+        for (let key in this.members ){
+            let thisMem = this.members[key]
+            let newMem = new Member(key,thisMem.name)
+            Object.assign(newMem,thisMem)
+
+            this.members[key] = newMem
+        }
+    }
 }
 
 class Critere {
@@ -98,6 +108,24 @@ class Evaluation {
         this.criteres = {}
         this.groupes = {}
     }
+
+    assignChilds() {
+        for (let key in this.criteres ){
+            let thisCrit = this.criteres[key]
+            let newCrit = new Critere(key,thisCrit.name,thisCrit.note)
+            Object.assign(newCrit,thisCrit)
+
+            this.criteres[key] = newCrit
+        }
+
+        for (let key in this.groupes ){
+            let thisGroupe = this.groupes[key]
+            let newGroupe = new Groupe(key,thisGroupe.name,this.criteres)
+            Object.assign(thisGroupe,newGroupe)
+            newGroupe.assignChilds()
+            this.groupes[key] = newGroupe
+        }
+    }
 }
 
 export class Evaluations {
@@ -118,6 +146,16 @@ export class Evaluations {
 
     constructor(){
         this.evaluations = {}
+    }
+
+    assignChilds() {
+        for (let key in this.evaluations ){
+            let thisEval = this.evaluations[key]
+            let newEval = new Evaluation(key,thisEval.name)
+            Object.assign(newEval,thisEval)
+            newEval.assignChilds()
+            this.evaluations[key] = newEval
+        }
     }
 }
 
