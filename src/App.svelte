@@ -25,13 +25,15 @@
 
   async function loadFile(){
     let path = await open({
+      multiple: false,
       filters: [{
         name: 'json',
-        extensions: ['json']
+        extensions: ['json'],
       }]
     })
 
     if (path === null) { alert("le fichier n'a pas été ouvert"); return }
+    if ( Array.isArray(path) ) { alert("plusieurs fichiers sélectionner"); return }
 
     let fileData = await readTextFile( path );
     Object.assign($evaluations,JSON.parse(fileData))
