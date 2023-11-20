@@ -24,17 +24,17 @@ import {evaluations} from '../stores/store'
             <tr>
                 <td>Nom du groupe</td>
                 <td>Moyenne Globale</td>
-                {#each $evaluations.getEvaluation(selectedEval).getCriteres as critere}
+                {#each $evaluations.evaluations[selectedEval].getCriteres as critere}
                     <td>{critere.name}</td>
                 {/each}
             </tr>
         </thead>   
       
-        {#each $evaluations.getEvaluation(selectedEval).getGroupes as  groupe}
+        {#each $evaluations.evaluations[selectedEval].getGroupes as  groupe}
             <tr>
                 <th>{groupe.name}</th>
                 <td>{groupe.noteTotal}</td>
-                {#each $evaluations.getEvaluation(selectedEval).getCriteres as critere}
+                {#each $evaluations.evaluations[selectedEval].getCriteres as critere}
                     <td><input type="number" bind:value={groupe.notes[critere.id]}>/{critere.note}</td>
                 {/each}
         
