@@ -1,8 +1,5 @@
 import { writable } from 'svelte/store';
 
-export const selectedGroupNote = writable(["",""]);
-
-
 function genID(){
     return self.crypto.randomUUID()
 }
@@ -128,7 +125,7 @@ class Evaluation {
     }
 }
 
-export class Evaluations {
+class Evaluations {
     evaluations: {[key:string]:Evaluation}
 
     get getEvaluations(){
@@ -146,6 +143,29 @@ export class Evaluations {
 
     constructor(){
         this.evaluations = {}
+    }
+
+    get getMembersNotes(){
+        let returnObject = {}
+        for (let evaluation of this.getEvaluations) {
+            for (let groupe of evaluation.getGroupes) {
+                for (let member of groupe.getMembers){
+                    if ( !(member.name in returnObject) ){
+                        returnObject[member.name] = {}
+                    }
+
+                    returnObject[member.name][groupe.id] = {
+                        name:[evaluation.name],
+                        note:[groupe.noteTotal]
+                    }
+                    
+                }
+            }
+        }
+
+
+
+        return returnObject
     }
 
     assignChilds() {
