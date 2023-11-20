@@ -1,17 +1,65 @@
-<script>
-    import Configs from "./Configs.svelte";
-    import Main from "./Main.svelte";
+<script lang="ts">
+  import { save,open } from "@tauri-apps/api/dialog";
+  import { writeFile,readTextFile } from "@tauri-apps/api/fs";
 
-    let dir = "Home"
+  import NotesGroupes from "./routes/NotesGroupes.svelte";
+  import NotesIndiv from "./routes/NotesIndiv.svelte";
+  import ConfigGroupes from "./routes/ConfigGroupes.svelte";
+  import ConfigEvaluations from "./routes/ConfigEvaluations.svelte";
+  import { evaluations } from "./stores/store";
+
+  let dir = "NotesIndiv"
+
+  async function saveFile(){
+    let path = await save({
+      filters: [{
+        name: 'json',
+        extensions: ['json']
+      }]
+    })
+
+    if (path === null) { alert("le fichier n'a pas été sauvegarder"); return }
+
+    await writeFile({ path: path, contents: JSON.stringify($evaluations) });
+  }
+
+  async function loadFile(){
+    let path = await open({
+      filters: [{
+        name: 'json',
+        extensions: ['json']
+      }]
+    })
+
+    if (path === null) { alert("le fichier n'a pas été ouvert"); return }
+
+    let fileData = await readTextFile( path );
+    Object.assign($evaluations,JSON.parse(fileData))
+
+  }
+
 </script>
 
+<h1>Comm'Notes</h1>
+
+<button on:click={saveFile}>Save</button>
+<button on:click={loadFile}>Load</button>
+
 <main>
-  <button on:click={() => {dir = "Home"}}>Home</button>
-  <button on:click={() => {dir = "Configs"}}>Configs</button>
-  {#if dir == "Home"}
-  <Main></Main>
-  {:else if dir == "Configs"}
-  <Configs></Configs>
+  <button on:click={() => {dir = "NotesIndiv"}}>NotesIndiv</button>
+  <button on:click={() => {dir = "NotesGroupes"}}>NotesGroupes</button>
+  <button on:click={() => {dir = "ConfigGroupes"}}>ConfigGroupes</button>
+  <button on:click={() => {dir = "ConfigEvaluations"}}>ConfigEvaluations</button>
+  {#if dir == "NotesIndiv"}
+  <NotesIndiv></NotesIndiv>
+  {:else if dir == "NotesGroupes"}
+  <NotesGroupes></NotesGroupes>
+  {:else if dir == "ConfigGroupes"}
+  <ConfigGroupes></ConfigGroupes>
+  {:else if dir == "ConfigEvaluations"}
+  <ConfigEvaluations></ConfigEvaluations>
   {/if}
+
+
 
 </main>

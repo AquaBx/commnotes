@@ -1,10 +1,10 @@
 <script lang="ts">
-  import {currentNotes,derivedCurrentGroups} from '../stores/store'
+  import {currentEvals,derivedCurrentGroups} from '../stores/store'
 
   export let keygroup:string
   export let keynote:string
 
-  let criteres = $currentNotes[keynote].criteres
+  let criteres = $currentEvals[keynote].criteres
 
   let sumCriteres = (() => {
     let sum = 0

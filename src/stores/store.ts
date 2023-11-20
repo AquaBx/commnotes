@@ -1,157 +1,128 @@
-import { derived, writable } from 'svelte/store';
+import { writable } from 'svelte/store';
 
 export const selectedGroupNote = writable(["",""]);
 
 
-export const currentGroups = writable(
-    { 
-        "gr1" : {
-            name:"Groupe 1",
-            notes:{},
-            members : {
-                "a" : {name:"Damien"},
-                "b" : {name:"Baptise"},
-            }
-        },
-        "gr2" : {
-            name:"Groupe 2",
-            notes:{},
-            members : {
-                "a" : {name:"Damien"},
-                "b" : {name:"Baptise"},
-            }
-        },
-        "gr3" : {
-            name:"Groupe 3",
-            notes:{},
-            members : {
-                "a" : {name:"Damien"},
-                "b" : {name:"Baptise"},
-            }
-        }
+function genID(){
+    return self.crypto.randomUUID()
+}
+
+class Member {
+    name : string
+    id : string
+    constructor(id:string,name:string){
+        this.name = name
+        this.id = id
     }
-);
+}
 
-export function derivedCurrentGroups(GroupID:string,NoteID:string) {
-    const {subscribe} = derived(currentGroups, (currentGroups2) => {
+class Groupe {
+    name : string
+    id : string
+    members : {[key:string]:Member}
+    notes: {[key:string]:number}
+    criteresSum: number
 
-        let sum = 0
+    constructor(id:string,name:string,criteres:{[key:string]:Critere}){
+        this.name = name
+        this.members = {}
+        this.notes = Object.keys(criteres).reduce((obj,key) =>  ({...obj , [key]:0}), {} )
+        this.criteresSum = Object.values(criteres).reduce((sum,critere) => sum+critere.note, 0 )
+        this.id = id
+    }
 
-        for (let item of Object.values(currentGroups2[GroupID].notes[NoteID].criteres)) {
-            sum += item.note 
-        }
+    get noteTotal(){
+        return Object.values(this.notes).reduce((sum,num) => sum+num, 0)/this.criteresSum*20
+    }
 
-        return sum
-    })
+    get getMembers(){
+        return Object.values(this.members)
+    }
 
-    return {subscribe}
-} 
+    set addMember(name:string){
+        let id = genID()
+        this.members[id] = new Member(id,name)
+    }
 
-export const currentNotes = writable(
-    {
-        "nt1":{
-            name:"CC1",
-            commentaire:"",
-            criteres : {
-                crit1:{
-                    name:"Structure globale du diaporama",
-                    note:2
-                },
-                crit2:{
-                    name:"Qualité de la communication orale",
-                    note:5
-                },
-                crit3:{
-                    name:"Qualité de la communication non-verbale",
-                    note:2
-                },
-                crit4:{
-                    name:"Clarté et lisibilité du support",
-                    note:2
-                },
-                crit5:{
-                    name:"Pertinence de l’introduction",
-                    note:2
-                },
-                crit6:{
-                    name:"Pertinence du développement et structuration des idées",
-                    note:10
-                },
-                crit7:{
-                    name:"Pertinence de la conclusion",
-                    note:2
-                }
-            }
-        },
-        "nt2":{
-            name:"CC2",
-            commentaire:"",
-            criteres : {
-              crit1:{
-                  name:"Structure globale du diaporama",
-                  note:2
-              },
-              crit2:{
-                  name:"Qualité de la communication orale",
-                  note:5
-              },
-              crit3:{
-                  name:"Qualité de la communication non-verbale",
-                  note:2
-              },
-              crit4:{
-                  name:"Clarté et lisibilité du support",
-                  note:2
-              },
-              crit5:{
-                  name:"Pertinence de l’introduction",
-                  note:2
-              },
-              crit6:{
-                  name:"Pertinence du développement et structuration des idées",
-                  note:10
-              },
-              crit7:{
-                  name:"Pertinence de la conclusion",
-                  note:2
-              }
-          },
-          
-        },
-        "nt3":{
-            name:"CC3",
-            commentaire:"",
-            criteres : {
-              crit1:{
-                  name:"Structure globale du diaporama",
-                  note:2
-              },
-              crit2:{
-                  name:"Qualité de la communication orale",
-                  note:5
-              },
-              crit3:{
-                  name:"Qualité de la communication non-verbale",
-                  note:2
-              },
-              crit4:{
-                  name:"Clarté et lisibilité du support",
-                  note:2
-              },
-              crit5:{
-                  name:"Pertinence de l’introduction",
-                  note:2
-              },
-              crit6:{
-                  name:"Pertinence du développement et structuration des idées",
-                  note:10
-              },
-              crit7:{
-                  name:"Pertinence de la conclusion",
-                  note:2
-              }
-          },
-          
-        }
-      }
-);
+    set removeMember(id:string){
+        delete this.members[id]
+    }
+}
+
+class Critere {
+    name:string
+    id:string
+    note:number
+    constructor(id:string,name:string,note:number){
+        this.name = name
+        this.note = note
+        this.id = id
+    }
+}
+
+class Evaluation {
+    id:string
+    name:string
+    criteres:{[key:string]:Critere}
+    groupes: {[key:string]:Groupe}
+
+    get getCriteres(){
+        return Object.values(this.criteres)
+    }
+
+    set addCritere(name:string){
+        let id = genID()
+        this.criteres[id] = new Critere(id,name,0)
+    }
+
+    set removeCritere(id:string){
+        delete this.criteres[id]
+    }
+
+    get getGroupes(){
+        return Object.values(this.groupes)
+    }
+
+    set addGroupe(name:string){
+        let id = genID()
+        this.groupes[id] = new Groupe(id,name,this.criteres)
+    }
+
+    set removeGroupe(id:string){
+        delete this.groupes[id]
+    }
+
+    constructor(id:string,name:string){
+        this.id = id
+        this.name = name
+        this.criteres = {}
+        this.groupes = {}
+    }
+}
+
+export class Evaluations {
+    evaluations: {[key:string]:Evaluation}
+
+    get getEvaluations(){
+        return Object.values(this.evaluations)
+    }
+
+    getEvaluation(id:string){
+        return this.evaluations[id]
+    }
+
+    set addEvaluation(name:string){
+        let id = genID()
+        this.evaluations[id] = new Evaluation(id,name)
+    }
+
+    set removeEvaluation(id:string){
+        delete this.evaluations[id]
+    }
+
+    constructor(){
+        this.evaluations = {}
+    }
+}
+
+export const evaluations = writable(new Evaluations())

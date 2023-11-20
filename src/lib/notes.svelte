@@ -1,8 +1,8 @@
 <script lang="ts">
-  import {currentGroups,currentNotes,selectedGroupNote} from '../stores/store'
+  import {currentGroups,currentEvals,selectedGroupNote} from '../stores/store'
 
   let groups = $currentGroups
-  let notes = $currentNotes
+  let notes = $currentEvals
 
   let groupID:string = ""
   let noteID:string = ""
