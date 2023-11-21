@@ -2,14 +2,15 @@
 
   import {evaluations} from '../stores/store'
 
+  let notes = $evaluations.getMembersNotes
 </script>
 
 <table>
-{#each Object.keys($evaluations.getMembersNotes) as name }
+{#each Object.keys(notes) as controle }
   <tr>
-    <th>{name}</th>
-    {#each Object.keys($evaluations.getMembersNotes[name]) as keyGroup }
-      <td>{$evaluations.getMembersNotes[name][keyGroup].note}</td>
+    <th>{controle}</th>
+    {#each Object.keys(notes[controle]) as eleve }
+      <td>{eleve} {notes[controle][eleve]}</td>
     {/each}
   </tr>
 {/each}
