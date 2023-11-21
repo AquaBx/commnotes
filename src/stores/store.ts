@@ -127,6 +127,20 @@ class Evaluation {
 
 class Evaluations {
     evaluations: {[key:string]:Evaluation}
+    members:{[key:string]:Member}
+
+    get getMembers(){
+        return Object.values(this.members)
+    }
+
+    set addMember(name:string){
+        let id = genID()
+        this.members[id] = new Member(id,name)
+    }
+
+    set removeMember(id:string){
+        delete this.members[id]
+    }
 
     get getEvaluations(){
         return Object.values(this.evaluations)
@@ -143,6 +157,7 @@ class Evaluations {
 
     constructor(){
         this.evaluations = {}
+        this.members = {}    
     }
 
     get getMembersNotes(){
@@ -175,6 +190,14 @@ class Evaluations {
             Object.assign(newEval,thisEval)
             newEval.assignChilds()
             this.evaluations[key] = newEval
+        }
+
+        for (let key in this.members ){
+            let thisMem = this.members[key]
+            let newMem = new Member(key,thisMem.name)
+            Object.assign(newMem,thisMem)
+
+            this.members[key] = newMem
         }
     }
 }
