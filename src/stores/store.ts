@@ -29,7 +29,7 @@ class Groupe {
     }
 
     get noteTotal(){
-        return Object.values(this.notes).reduce((sum,num) => sum+num, 0)/this.criteresSum*20
+        return ( Object.values(this.notes).reduce((sum,num) => sum+num, 0)/this.criteresSum*20 ).toFixed(3)
     }
 
     get getMembers(){
@@ -45,12 +45,16 @@ class Groupe {
         delete this.members[id]
     }
 
-    assignChilds() {
-        for (let key in this.members ){
-            let thisMem = this.members[key]
+    assignChilds(members:any,notes:any) {
+        this.notes = notes
+
+        console.log(members)
+
+        for (let key in members ){
+            let thisMem = members[key]
             let newMem = new Member(key,thisMem.name)
             Object.assign(newMem,thisMem)
-
+            
             this.members[key] = newMem
         }
     }
@@ -111,7 +115,7 @@ class Evaluation {
             let thisCrit = this.criteres[key]
             let newCrit = new Critere(key,thisCrit.name,thisCrit.note)
             Object.assign(newCrit,thisCrit)
-
+            
             this.criteres[key] = newCrit
         }
 
@@ -119,28 +123,16 @@ class Evaluation {
             let thisGroupe = this.groupes[key]
             let newGroupe = new Groupe(key,thisGroupe.name,this.criteres)
             Object.assign(thisGroupe,newGroupe)
-            newGroupe.assignChilds()
+            newGroupe.assignChilds(thisGroupe.members,thisGroupe.notes)
             this.groupes[key] = newGroupe
+
+            
         }
     }
 }
 
 class Evaluations {
     evaluations: {[key:string]:Evaluation}
-    members:{[key:string]:Member}
-
-    get getMembers(){
-        return Object.values(this.members)
-    }
-
-    set addMember(name:string){
-        let id = genID()
-        this.members[id] = new Member(id,name)
-    }
-
-    set removeMember(id:string){
-        delete this.members[id]
-    }
 
     get getEvaluations(){
         return Object.values(this.evaluations)
@@ -157,28 +149,23 @@ class Evaluations {
 
     constructor(){
         this.evaluations = {}
-        this.members = {}    
     }
 
     get getMembersNotes(){
-        let returnObject = {}
+        let returnObject:{[key:string]:{[key:string]:number}} = {}
         for (let evaluation of this.getEvaluations) {
+
+            returnObject[evaluation.name] = {}
+
+
             for (let groupe of evaluation.getGroupes) {
                 for (let member of groupe.getMembers){
-                    if ( !(member.name in returnObject) ){
-                        returnObject[member.name] = {}
-                    }
 
-                    returnObject[member.name][groupe.id] = {
-                        name:[evaluation.name],
-                        note:[groupe.noteTotal]
-                    }
+                    returnObject[evaluation.name][member.name] = groupe.noteTotal
                     
                 }
             }
         }
-
-
 
         return returnObject
     }
@@ -190,14 +177,6 @@ class Evaluations {
             Object.assign(newEval,thisEval)
             newEval.assignChilds()
             this.evaluations[key] = newEval
-        }
-
-        for (let key in this.members ){
-            let thisMem = this.members[key]
-            let newMem = new Member(key,thisMem.name)
-            Object.assign(newMem,thisMem)
-
-            this.members[key] = newMem
         }
     }
 }
